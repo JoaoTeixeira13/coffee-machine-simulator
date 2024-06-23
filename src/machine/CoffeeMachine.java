@@ -67,26 +67,32 @@ public class CoffeeMachine {
 
                 break;
             case COFFEE:
-                switch (input) {
-                    case "1":
-                        boolean isEnoughForEspresso = waterMlInMachine >= 250 && coffeeBeansGrInMachine >= 16;
-                        prepareEspresso(isEnoughForEspresso);
-                        break;
+                if (disposableCups > 0) {
 
-                    case "2":
-                        boolean isEnoughForLatte = waterMlInMachine >= 350 && milkMlInMachine >= 75 && coffeeBeansGrInMachine >= 20;
-                        prepareLatte(isEnoughForLatte);
-                        break;
+                    switch (input) {
+                        case "1":
+                            boolean isEnoughForEspresso = waterMlInMachine >= 250 && coffeeBeansGrInMachine >= 16;
+                            prepareEspresso(isEnoughForEspresso);
+                            break;
 
-                    case "3":
-                        boolean isEnoughForCappuccino = waterMlInMachine >= 200 && milkMlInMachine >= 100 && coffeeBeansGrInMachine >= 12;
-                        prepareCappuccino(isEnoughForCappuccino);
-                        break;
+                        case "2":
+                            boolean isEnoughForLatte = waterMlInMachine >= 350 && milkMlInMachine >= 75 && coffeeBeansGrInMachine >= 20;
+                            prepareLatte(isEnoughForLatte);
+                            break;
 
-                    default:
-                        state = State.ACTION;
-                        break;
+                        case "3":
+                            boolean isEnoughForCappuccino = waterMlInMachine >= 200 && milkMlInMachine >= 100 && coffeeBeansGrInMachine >= 12;
+                            prepareCappuccino(isEnoughForCappuccino);
+                            break;
+
+                        default:
+                            state = State.ACTION;
+                            break;
+                    }
+                } else {
+                    System.out.println("Sorry, not enough disposable cups. Please refill.");
                 }
+
                 break;
             default:
                 break;
@@ -134,12 +140,8 @@ public class CoffeeMachine {
     private static void prepareEspresso(boolean isEnoughForEspresso) {
 
         if (isEnoughForEspresso) {
-            System.out.println("I have enough resources, making you a coffee!");
-
-            waterMlInMachine -= 250;
-            coffeeBeansGrInMachine -= 16;
-            money += 4;
-            disposableCups--;
+            printSuccessMessage();
+            prepareCoffee(250, 0, 16, 4);
 
         } else {
             String missingResource = waterMlInMachine < 250 ? "water" : "coffee beans";
@@ -152,13 +154,8 @@ public class CoffeeMachine {
 
         if (isEnoughForLatte) {
 
-            System.out.println("I have enough resources, making you a coffee!");
-
-            waterMlInMachine -= 350;
-            milkMlInMachine -= 75;
-            coffeeBeansGrInMachine -= 20;
-            money += 7;
-            disposableCups--;
+            printSuccessMessage();
+            prepareCoffee(350, 75, 20, 7);
 
         } else {
             String missingResource = waterMlInMachine < 350 ? "water" :
@@ -173,13 +170,8 @@ public class CoffeeMachine {
 
         if (isEnoughForCappuccino) {
 
-            System.out.println("I have enough resources, making you a coffee!");
-
-            waterMlInMachine -= 200;
-            milkMlInMachine -= 100;
-            coffeeBeansGrInMachine -= 12;
-            money += 6;
-            disposableCups--;
+            printSuccessMessage();
+            prepareCoffee(200, 100, 12, 6);
 
         } else {
             String missingResource = waterMlInMachine < 200 ? "water" :
@@ -188,6 +180,20 @@ public class CoffeeMachine {
         }
 
         state = State.ACTION;
+    }
+
+    private static void printSuccessMessage() {
+
+        System.out.println("I have enough resources, making you a coffee!");
+    }
+
+    private static void prepareCoffee(int waterMl, int milkMl, int coffeeBeansGr, int price) {
+        
+        waterMlInMachine -= waterMl;
+        milkMlInMachine -= milkMl;
+        coffeeBeansGrInMachine -= coffeeBeansGr;
+        money += price;
+        disposableCups--;
     }
 }
 
