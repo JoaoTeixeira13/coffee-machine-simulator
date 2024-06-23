@@ -140,12 +140,13 @@ public class CoffeeMachine {
     private static void prepareEspresso(boolean isEnoughForEspresso) {
 
         if (isEnoughForEspresso) {
+
             printSuccessMessage();
             prepareCoffee(250, 0, 16, 4);
 
         } else {
-            String missingResource = waterMlInMachine < 250 ? "water" : "coffee beans";
-            System.out.println("Sorry, not enough " + missingResource);
+
+            calculateMissingResource(250, 0);
         }
         state = State.ACTION;
     }
@@ -156,11 +157,9 @@ public class CoffeeMachine {
 
             printSuccessMessage();
             prepareCoffee(350, 75, 20, 7);
-
         } else {
-            String missingResource = waterMlInMachine < 350 ? "water" :
-                    milkMlInMachine < 75 ? "milk" : "coffee beans";
-            System.out.println("Sorry, not enough " + missingResource);
+
+            calculateMissingResource(350, 75);
         }
 
         state = State.ACTION;
@@ -172,11 +171,9 @@ public class CoffeeMachine {
 
             printSuccessMessage();
             prepareCoffee(200, 100, 12, 6);
-
         } else {
-            String missingResource = waterMlInMachine < 200 ? "water" :
-                    milkMlInMachine < 100 ? "milk" : "coffee beans";
-            System.out.println("Sorry, not enough " + missingResource);
+
+            calculateMissingResource(200, 100);
         }
 
         state = State.ACTION;
@@ -188,12 +185,19 @@ public class CoffeeMachine {
     }
 
     private static void prepareCoffee(int waterMl, int milkMl, int coffeeBeansGr, int price) {
-        
+
         waterMlInMachine -= waterMl;
         milkMlInMachine -= milkMl;
         coffeeBeansGrInMachine -= coffeeBeansGr;
         money += price;
         disposableCups--;
+    }
+
+    private static void calculateMissingResource(int requiredWater, int requiredMilk) {
+
+        String missingResource = waterMlInMachine < requiredWater ? "water" :
+                milkMlInMachine < requiredMilk ? "milk" : "coffee beans";
+        System.out.println("Sorry, not enough " + missingResource);
     }
 }
 
